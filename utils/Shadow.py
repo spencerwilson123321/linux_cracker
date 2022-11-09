@@ -46,7 +46,6 @@ class ShadowFileEntry:
                 self.password_hash = ""
             else:
                 extra, algorithm, extra2, salt, password_hash = tokens[1].split("$")
-                print(tokens[1].split("$"))
                 self.algorithm = algorithm
                 self.salt = salt
                 self.password_hash = password_hash
