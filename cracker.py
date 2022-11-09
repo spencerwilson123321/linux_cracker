@@ -11,7 +11,7 @@ if __name__ == "__main__":
     PARSER = argparse.ArgumentParser("./cracker.py")
     PARSER.add_argument("shadow_file", help="Path to the shadow file.")
     PARSER.add_argument("wordlist_file", help="Path to the wordlist file.")
-    PARSER.add_argument("-u", "--usernames", dest="usernames", help="A comma-separated list of usernames, only the given users will be targeted.", required=False)
+    PARSER.add_argument("-u", "--users", dest="users", help="A comma-separated list of usernames, only the given users will be targeted.", required=False)
     ARGS = PARSER.parse_args()
     
     if not os.path.isfile(ARGS.wordlist_file):
@@ -22,10 +22,10 @@ if __name__ == "__main__":
         print(f"ERROR: File not found '{ARGS.shadow_file}'", file=stderr)
         exit(1)
 
-    if ARGS.usernames is None:
+    if ARGS.users is None:
         userlist = []
     else:
-        userlist = ARGS.usernames.split(",")
+        userlist = ARGS.users.split(",")
 
     shadow_file = ShadowFile(ARGS.shadow_file)
     cracker = Cracker(shadow_file, userlist, ARGS.wordlist_file) 

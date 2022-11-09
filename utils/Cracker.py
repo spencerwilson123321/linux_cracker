@@ -18,13 +18,13 @@ class Cracker:
     def crack(self):
         for entry in self.shadow_file.entries:
             if len(self.userlist) != 0 and entry.username in self.userlist:
+                password_found = False
                 print(f"Cracking passwords for user: {entry.username}")
                 if entry.salt == "":
                     print(f"Cannot crack password for user: {entry.username}\n")
                     continue
                 cryptsalt = entry.salt
                 attempts = 0
-                password_found = False
                 for word in self.wordlist:
                     full_hash = crypt(word, cryptsalt)
                     if full_hash == cryptsalt+"$"+entry.password_hash:
@@ -39,12 +39,12 @@ class Cracker:
                     continue
                 print("")
             elif len(self.userlist) == 0:
+                password_found = False
                 print(f"Cracking passwords for user: {entry.username}\n")
                 if entry.salt == "":
                     print(f"Cannot crack password for user: {entry.username}")
                 cryptsalt = entry.salt
                 attempts = 0
-                password_found = False
                 for word in self.wordlist:
                     full_hash = crypt(word, cryptsalt)
                     if full_hash == cryptsalt+"$"+entry.password_hash:
