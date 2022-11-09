@@ -1,4 +1,11 @@
 
+AlgorithmTable = {
+    "6":"SHA-512",
+    "5":"SHA-256",
+    "3":"Blowfish",
+    "2":"Blowfish",
+    "1":"MD5"
+}
 
 class ShadowFile:
     """
@@ -20,7 +27,9 @@ class ShadowFileEntry:
         # the instance variables.
         if entry == "":
             self.username = ""
-            self.password = ""
+            self.algorithm = ""
+            self.salt = ""
+            self.password_hash = ""
             self.last_passwd_change = ""
             self.min_passwd_age = ""
             self.max_passwd_age = ""
@@ -31,7 +40,15 @@ class ShadowFileEntry:
         else:
             tokens = entry.split(":")
             self.username = tokens[0]
-            self.password = tokens[1]
+            if tokens[1] in ["*", "!"]:
+                self.algorithm = ""
+                self.salt = ""
+                self.password_hash = ""
+            else:
+                extra, algorithm, salt, password_hash = tokens[1].split("$")
+                self.algorithm = algorithm
+                self.salt = salt
+                self.password_hash = password_hash
             self.last_passwd_change = tokens[2]
             self.min_passwd_age = tokens[3]
             self.max_passwd_age = tokens[4]
