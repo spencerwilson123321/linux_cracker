@@ -20,7 +20,7 @@ class Cracker:
             if len(self.userlist) != 0 and entry.username in self.userlist:
                 print(f"Cracking passwords for user: {entry.username}")
                 if entry.salt == "":
-                    print(f"Cannot crack password for user: {entry.username}")
+                    print(f"Cannot crack password for user: {entry.username}\n")
                     continue
                 cryptsalt = entry.salt
                 attempts = 0
@@ -39,7 +39,7 @@ class Cracker:
                     continue
                 print("")
             elif len(self.userlist) == 0:
-                print(f"Cracking passwords for user: {entry.username}")
+                print(f"Cracking passwords for user: {entry.username}\n")
                 if entry.salt == "":
                     print(f"Cannot crack password for user: {entry.username}")
                 cryptsalt = entry.salt
