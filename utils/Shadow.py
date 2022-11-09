@@ -27,7 +27,6 @@ class ShadowFileEntry:
         # the instance variables.
         if entry == "":
             self.username = ""
-            self.algorithm = ""
             self.salt = ""
             self.password_hash = ""
             self.last_passwd_change = ""
@@ -41,14 +40,17 @@ class ShadowFileEntry:
             tokens = entry.split(":")
             self.username = tokens[0]
             if tokens[1] in ["*", "!", "!!", "!*"]:
-                self.algorithm = ""
                 self.salt = ""
                 self.password_hash = ""
             else:
-                extra, algorithm, extra2, salt, password_hash = tokens[1].split("$")
-                self.algorithm = algorithm
-                self.salt = salt
-                self.password_hash = password_hash
+                pieces = tokens[1].split("$")
+                size = len(pieces)
+                salt = ""
+                for i in range(0, size-1):
+                    salt += pieces[i]+"$"
+                self.salt = salt[0:len(salt)-1]
+                self.password_hash = pieces[size-1]
+            print(self.salt)
             self.last_passwd_change = tokens[2]
             self.min_passwd_age = tokens[3]
             self.max_passwd_age = tokens[4]

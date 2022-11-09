@@ -19,7 +19,7 @@ class Cracker:
         for entry in self.shadow_file.entries:
             if len(self.userlist) != 0 and entry.username in self.userlist:
                 print(f"Attempting to crack user: {entry.username}")
-                cryptsalt = "$"+entry.algorithm+"$"+entry.salt
+                cryptsalt = entry.salt
                 attempts = 0
                 for word in self.wordlist:
                     full_hash = crypt(word, cryptsalt)
@@ -31,7 +31,7 @@ class Cracker:
                     attempts += 1
             elif len(self.userlist) == 0:
                 print(f"Attempting to crack user: {entry.username}")
-                cryptsalt = "$"+entry.algorithm+"$"+entry.salt
+                cryptsalt = entry.salt
                 attempts = 0
                 for word in self.wordlist:
                     full_hash = crypt(word, cryptsalt)
