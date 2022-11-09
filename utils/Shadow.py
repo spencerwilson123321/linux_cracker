@@ -1,12 +1,4 @@
 
-AlgorithmTable = {
-    "6":"SHA-512",
-    "5":"SHA-256",
-    "3":"Blowfish",
-    "2":"Blowfish",
-    "1":"MD5"
-}
-
 class ShadowFile:
     """
         A class representing a parsed shadow file.
@@ -39,6 +31,7 @@ class ShadowFileEntry:
         else:
             tokens = entry.split(":")
             self.username = tokens[0]
+            print(tokens[1])
             if tokens[1] in ["*", "!", "!!", "!*"]:
                 self.salt = ""
                 self.password_hash = ""
