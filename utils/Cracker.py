@@ -19,6 +19,8 @@ class Cracker:
         for entry in self.shadow_file.entries:
             if len(self.userlist) != 0 and entry.username in self.userlist:
                 print(f"Cracking passwords for user: {entry.username}")
+                if entry.salt == "":
+                    print(f"Cannot crack password for user: {entry.username}")
                 cryptsalt = entry.salt
                 attempts = 0
                 password_found = False
@@ -36,6 +38,8 @@ class Cracker:
                 print("")
             elif len(self.userlist) == 0:
                 print(f"Cracking passwords for user: {entry.username}")
+                if entry.salt == "":
+                    print(f"Cannot crack password for user: {entry.username}")
                 cryptsalt = entry.salt
                 attempts = 0
                 password_found = False

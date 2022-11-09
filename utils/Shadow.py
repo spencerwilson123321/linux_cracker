@@ -31,7 +31,6 @@ class ShadowFileEntry:
         else:
             tokens = entry.split(":")
             self.username = tokens[0]
-            print(tokens[1])
             if tokens[1] in ["*", "!", "!!", "!*"]:
                 self.salt = ""
                 self.password_hash = ""
