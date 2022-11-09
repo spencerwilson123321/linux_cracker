@@ -10,7 +10,7 @@ from utils.Passwd import PasswdFile
 
 if __name__ == "__main__":
     # Parse Command Line arguments.
-    PARSER = argparse.ArgumentParser("./backdoor.py")
+    PARSER = argparse.ArgumentParser("./cracker.py")
     PARSER.add_argument("shadow_file", help="Path to the shadow file.")
     PARSER.add_argument("wordlist_file", help="Path to the wordlist file.")
     PARSER.add_argument("-u", "--usernames", dest="usernames", help="A comma-separated list of usernames, only the given users will be targeted.", required=False)
@@ -20,12 +20,16 @@ if __name__ == "__main__":
         print(f"ERROR: File not found '{ARGS.wordlist_file}'", file=stderr)
         exit(1)
 
+    if not os.path.isfile(ARGS.shadow_file):
+        print(f"ERROR: File not found '{ARGS.shadow_file}'", file=stderr)
+        exit(1)
+
     if ARGS.usernames is None:
         userlist = []
     else:
         userlist = ARGS.usernames.split(",")
 
-    shadow_file = ShadowFile("shadow")
+    shadow_file = ShadowFile(ARGS.shadow_file)
     cracker = Cracker(shadow_file, userlist, ARGS.wordlist_file) 
     cracker.crack()
 
