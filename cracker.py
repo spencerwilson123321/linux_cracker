@@ -30,7 +30,6 @@ if __name__ == "__main__":
         userlist = ARGS.usernames.split(",")
 
     shadow_file = ShadowFile(ARGS.shadow_file)
-    exit(1)
     cracker = Cracker(shadow_file, userlist, ARGS.wordlist_file) 
     cracker.crack()
 
