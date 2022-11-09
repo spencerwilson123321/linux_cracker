@@ -1,8 +1,17 @@
 from utils.Cracker import Cracker
-from utils.ShadowParser import ShadowParser
+from utils.Shadow import ShadowFile, ShadowFileEntry
+from utils.Passwd import PasswdFile, PasswdFileEntry
 
 if __name__ == "__main__":
     c = Cracker()
-    parser = ShadowParser()
-    parser.parse("/etc/shadow")
+    shadow_file = ShadowFile("shadow")
+    passwd_file = PasswdFile("passwd") 
+    for entry in passwd_file.entries:
+        print(entry.username)
+        print(entry.password)
+        print()
+
+
+
+
 
