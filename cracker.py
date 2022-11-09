@@ -2,10 +2,8 @@ import argparse
 import os
 from sys import stderr
 
-
 from utils.Cracker import Cracker
-from utils.Shadow import ShadowFile, AlgorithmTable 
-from utils.Passwd import PasswdFile 
+from utils.Shadow import ShadowFile
 
 
 if __name__ == "__main__":
