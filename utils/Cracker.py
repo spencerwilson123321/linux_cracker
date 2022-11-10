@@ -21,7 +21,6 @@ class Cracker:
                 password_found = False
                 print(f"Cracking passwords for user: {entry.username}")
                 if entry.salt == "":
-                    print(f"Cannot crack password for user: {entry.username}\n")
                     continue
                 cryptsalt = entry.salt
                 attempts = 0
@@ -34,15 +33,11 @@ class Cracker:
                         print(f"Password: {word}")
                         break
                     attempts += 1
-                if not password_found:
-                    print(f"No passwords found for user: {entry.username}")
-                    continue
-                print("")
             elif len(self.userlist) == 0:
                 password_found = False
-                print(f"Cracking passwords for user: {entry.username}\n")
+                print(f"Cracking passwords for user: {entry.username}")
                 if entry.salt == "":
-                    print(f"Cannot crack password for user: {entry.username}")
+                    continue
                 cryptsalt = entry.salt
                 attempts = 0
                 for word in self.wordlist:
@@ -54,8 +49,4 @@ class Cracker:
                         print(f"Password: {word}")
                         break
                     attempts += 1
-                if not password_found:
-                    print(f"No passwords found for user: {entry.username}")
-                print("")
-        print("Finished")
 
