@@ -6,6 +6,23 @@ if geteuid() != 0:
     print("ERROR: Password cracker requires root privileges!", file=stderr)
     exit(1)
 
+
+def getAlgorithm(salt: str):
+    if "$1$" in salt:
+        return "MD5"
+    if "$2a$" in salt:
+        return "Blowfish"
+    if "$2y$" in salt:
+        return "Blowfish"
+    if "$5$" in salt:
+        return "SHA-256"
+    if "$6$" in salt:
+        return "SHA-512"
+    if "$y$" in salt:
+        return "yescrypt"
+    return "Algorithm not detected"
+
+
 class Cracker:
 
     def __init__(self, shadow_file, userlist, wordlistpath):
@@ -22,6 +39,7 @@ class Cracker:
                 print(f"Cracking passwords for user: {entry.username}")
                 if entry.salt == "":
                     continue
+                print(f"Algorithm detected: {getAlgorithm(entry.salt)}")
                 cryptsalt = entry.salt
                 attempts = 0
                 for word in self.wordlist:
@@ -38,6 +56,7 @@ class Cracker:
                 print(f"Cracking passwords for user: {entry.username}")
                 if entry.salt == "":
                     continue
+                print(f"Algorithm detected: {getAlgorithm(entry.salt)}")
                 cryptsalt = entry.salt
                 attempts = 0
                 for word in self.wordlist:
