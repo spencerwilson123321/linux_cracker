@@ -57,9 +57,10 @@ class Cracker:
                         print(f"Duration: {stop_time-start_time:0.4f} seconds")
                         break
                     attempts += 1
-                stop_time = perf_counter()
-                print("Password not found!")
-                print(f"Duration: {stop_time-start_time:0.4f} seconds")
+                if not password_found:
+                    stop_time = perf_counter()
+                    print("Password not found!")
+                    print(f"Duration: {stop_time-start_time:0.4f} seconds")
             elif len(self.userlist) == 0:
                 password_found = False
                 print(f"Cracking passwords for user: {entry.username}")
@@ -80,7 +81,8 @@ class Cracker:
                         print(f"Duration: {stop_time-start_time:0.4f} seconds")
                         break
                     attempts += 1
-                stop_time = perf_counter()
-                print("Password not found!")
-                print(f"Duration: {stop_time-start_time:0.4f} seconds")
+                if not password_found:
+                    stop_time = perf_counter()
+                    print("Password not found!")
+                    print(f"Duration: {stop_time-start_time:0.4f} seconds")
 
