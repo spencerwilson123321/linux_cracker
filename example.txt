@@ -1,0 +1,13 @@
+this
+is
+an
+example
+wordlist
+each
+word
+must
+be
+on
+a
+new
+line
