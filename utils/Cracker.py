@@ -60,8 +60,6 @@ class Cracker:
                 attempts = 0
                 start_time = perf_counter()
                 for word in self.wordlist:
-                    if word == "SocksMomo1999":
-                        self.write_output("What de heck?")
                     full_hash = crypt(word, cryptsalt)
                     if full_hash == cryptsalt+"$"+entry.password_hash:
                         stop_time = perf_counter()
