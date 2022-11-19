@@ -2,10 +2,13 @@ from os import geteuid
 from sys import stderr
 from crypt import crypt
 from time import perf_counter
+from multiprocessing import Lock
 
 if geteuid() != 0:
     print("ERROR: Password cracker requires root privileges!", file=stderr)
     exit(1)
+
+LOCK = Lock()
 
 
 def getAlgorithm(salt: str):
@@ -26,12 +29,22 @@ def getAlgorithm(salt: str):
 
 class Cracker:
 
-    def __init__(self, shadow_file, userlist, wordlistpath):
+    CRACKER_RESULTS = ""
+
+    def __init__(self, shadow_file, userlist, wordlist):
         self.shadow_file = shadow_file
         self.userlist = userlist
-        with open(wordlistpath, "r") as f:
-            lines = f.readlines()
-            self.wordlist = [line.strip() for line in lines]
+        self.wordlist = wordlist
+        
+    def write_output(self, value):
+        LOCK.acquire()
+        self.CRACKER_RESULTS += value + "\n"
+        LOCK.release()
+    
+    def print_output(self):
+        LOCK.acquire()
+        print(self.CRACKER_RESULTS)
+        LOCK.release()
     
     def crack(self):
         for entry in self.shadow_file.entries:
@@ -39,34 +52,36 @@ class Cracker:
                 continue
             if len(self.userlist) != 0 and entry.username in self.userlist:
                 password_found = False
-                print(f"Cracking passwords for user: {entry.username}")
+                self.write_output(f"Cracking passwords for user: {entry.username}")
                 if entry.salt == "":
                     continue
-                print(f"Algorithm detected: {getAlgorithm(entry.salt)}")
+                self.write_output(f"Algorithm detected: {getAlgorithm(entry.salt)}")
                 cryptsalt = entry.salt
                 attempts = 0
                 start_time = perf_counter()
                 for word in self.wordlist:
+                    if word == "SocksMomo1999":
+                        self.write_output("What de heck?")
                     full_hash = crypt(word, cryptsalt)
                     if full_hash == cryptsalt+"$"+entry.password_hash:
                         stop_time = perf_counter()
                         attempts += 1
                         password_found = True
-                        print(f"Password Found in {attempts} attempts!")
-                        print(f"Password: {word}")
-                        print(f"Duration: {stop_time-start_time:0.4f} seconds")
+                        self.write_output(f"Password Found in {attempts} attempts!")
+                        self.write_output(f"Password: {word}" )
+                        self.write_output(f"Duration: {stop_time-start_time:0.4f} seconds")
                         break
                     attempts += 1
                 if not password_found:
                     stop_time = perf_counter()
-                    print("Password not found!")
-                    print(f"Duration: {stop_time-start_time:0.4f} seconds")
+                    self.write_output("Password not found!" )
+                    self.write_output(f"Duration: {stop_time-start_time:0.4f} seconds")
             elif len(self.userlist) == 0:
                 password_found = False
-                print(f"Cracking passwords for user: {entry.username}")
+                self.write_output(f"Cracking passwords for user: {entry.username}")
                 if entry.salt == "":
                     continue
-                print(f"Algorithm detected: {getAlgorithm(entry.salt)}")
+                self.write_output(f"Algorithm detected: {getAlgorithm(entry.salt)}" )
                 cryptsalt = entry.salt
                 attempts = 0
                 start_time = perf_counter()
@@ -76,13 +91,13 @@ class Cracker:
                         stop_time = perf_counter()
                         attempts += 1
                         password_found = True
-                        print(f"Password Found in {attempts} attempts!")
-                        print(f"Password: {word}")
-                        print(f"Duration: {stop_time-start_time:0.4f} seconds")
+                        self.write_output(f"Password Found in {attempts} attempts!" )
+                        self.write_output(f"Password: {word}" )
+                        self.write_output(f"Duration: {stop_time-start_time:0.4f} seconds" )
                         break
                     attempts += 1
                 if not password_found:
                     stop_time = perf_counter()
-                    print("Password not found!")
-                    print(f"Duration: {stop_time-start_time:0.4f} seconds")
-
+                    self.write_output("Password not found!" )
+                    self.write_output(f"Duration: {stop_time-start_time:0.4f} seconds" )
+        print(self.CRACKER_RESULTS)
